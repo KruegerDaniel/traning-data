@@ -30,7 +30,7 @@ def extract_imports(code):
 def install_dependencies(modules):
     for mod in modules:
         if mod in {"matplotlib", "numpy", "os", "sys", "re", "shutil", "time", "pathlib"}:
-            continue  # built-ins or already required
+            continue
         try:
             print(f"📦 Installing: {mod}")
             subprocess.check_call([sys.executable, "-m", "pip", "install", mod])
@@ -40,15 +40,11 @@ def install_dependencies(modules):
 def patch_script_for_mp4(py_path, temp_path, output_mp4):
     code = py_path.read_text(encoding="utf-8")
 
-    # Attempt to identify the animation assignment
     anim_assign = re.search(r'(\w+)\s*=\s*animation\.FuncAnimation', code)
     anim_var = anim_assign.group(1) if anim_assign else "ani"
 
-    # Remove plt.show()
     code = re.sub(r'plt\.show\s*\(\s*\)', '', code)
 
-    # Insert MP4 saving at the end
-    # Patch: save the animation as MP4 (ensure ffmpeg is available)
     save_code = f"""
 import matplotlib
 matplotlib.use("Agg")
@@ -58,7 +54,6 @@ try:
 except Exception as e:
     print("❌ Animation save failed:", e)
 """
-    # Insert just before the last line or at the end
     code = code.rstrip() + "\n" + save_code
 
     temp_path.write_text(code, encoding="utf-8")
@@ -82,7 +77,7 @@ def run_matplot_script(py_path, temp_path):
         print(f"❌ Error running {temp_path}: {e}")
 
 def run_manim_script(filepath, scene_name):
-    file_stem = Path(filepath).stem  # e.g., "example_0"
+    file_stem = Path(filepath).stem
     err_path = Path(ERR_DIR) / file_stem
 
     print(f"\n🎬 Running: manim -ql {filepath} {scene_name}")
@@ -103,7 +98,6 @@ def run_manim_script(filepath, scene_name):
         print("⚠️ STDERR:")
         print(result.stderr)
 
-        # If Manim process failed (nonzero return code), save stderr
         if result.returncode != 0:
             err_msg = result.stderr if result.stderr is not None else "(No stderr output)"
             err_path.write_text(f'Running: manim -ql {filepath} {scene_name}\n {err_msg}', encoding="utf-8")

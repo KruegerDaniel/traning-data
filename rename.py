@@ -7,10 +7,8 @@ base_dir = './media/videos'
 rendered_dir = './rendered'
 os.makedirs(rendered_dir, exist_ok=True)
 
-# Regex to match "example_x" pattern
 example_pattern = re.compile(r'^example_(\d+)$')
 
-# Loop through all directories in base_dir
 def rename_manim_files():
     for entry in os.listdir(base_dir):
         match = example_pattern.match(entry)

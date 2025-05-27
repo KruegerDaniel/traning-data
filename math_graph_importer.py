@@ -35,13 +35,13 @@ if not library_type or library_type not in PY_KEYWORDS.keys():
 language_type = "python" if library_type in ["manim", "matplotlib"] else "tex"
 dataset = load_dataset("bigcode/the-stack-dedup", data_dir=f"data/{language_type}", split="train", streaming=True)
 
+
 # ========= Language Filter Function =========
 
 def extract_comments_and_strings(code: str) -> list[str]:
     pattern = r"(#.*?$|\"\"\".*?\"\"\"|'''.*?'''|\".*?\"|'.*?')"
     matches = re.findall(pattern, code, re.DOTALL | re.MULTILINE)
 
-    # Combine and clean
     combined_text = " ".join(matches)
     cleaned_text = re.sub(r"[\n'#\"\\]", " ", combined_text)
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
@@ -68,7 +68,7 @@ def detect_language_sliding_window(words: list, window_size: int = 10, step: int
 
         if not lang_counts:
             return "UNKNOWN"
-    # Get the most common language
+
     most_common_lang, _ = lang_counts.most_common(1)[0]
     return most_common_lang
 
@@ -85,18 +85,15 @@ def manim_filter(code: str) -> bool:
     blacklisted_keywords = [
         "manimgl", "manim_rubikscube", "manimlib",
     ]
-    # Check for blacklisted keywords
     if any(kw in code for kw in blacklisted_keywords):
         return False
 
-    # Require animation
     if "self.play(" not in code:
         return False
 
     if "from manim_ml.neural_network" in code:
         return True
 
-    # List of visual object types considered "non-text"
     visual_mobjects = [
         "Circle", "Square", "Rectangle", "Polygon", "Line", "Dot", "Arrow", "Ellipse",
         "Arc", "RegularPolygon", "Annulus", "Sector", "Triangle", "ImageMobject",
@@ -115,9 +112,8 @@ def manim_filter(code: str) -> bool:
             class_name = m.group(2)
             if class_name in visual_mobjects:
                 found_visual = True
-                break  # No need to keep checking if we find one
+                break
 
-    # If any non-text visual found, keep the script
     return found_visual
 
 
@@ -125,6 +121,7 @@ def matplotlib_filter(code: str) -> bool:
     if "plt.show()" not in code:
         return False
     return False
+
 
 def tikz_animation_filter(code: str) -> bool:
     has_tikz = r"\usepackage{tikz}" in code
