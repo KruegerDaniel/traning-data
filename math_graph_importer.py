@@ -164,7 +164,7 @@ def save_example(code: str, index: int, label: str) -> None:
 
 
 # ========= Main Loop =========
-MAX_RESULTS = 100 #1_000
+MAX_RESULTS = sys.argv[2] if len(sys.argv) > 1 else float("inf")
 saved_count = 0
 
 start_time = time.time()
