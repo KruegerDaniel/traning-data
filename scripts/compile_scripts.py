@@ -13,7 +13,7 @@ if not library_type or library_type not in ["manim", "matplotlib", "tikz"]:
 
 SCRIPTS_DIR = f"./sampled/{library_type}"
 OUTPUT_DIR = f"./rendered/{library_type}"
-ERR_DIR = "./err"
+ERR_DIR = f"./err/{library_type}"
 Path(ERR_DIR).mkdir(parents=True, exist_ok=True)
 TIMEOUT = 120  # seconds
 
