@@ -5,7 +5,7 @@ import time
 
 from datasets import load_dataset
 
-from config import PY_KEYWORDS
+from scripts.config import PY_KEYWORDS
 from scripts.filters.library_filters import filter_example
 
 library_type = sys.argv[1] if len(sys.argv) > 1 else None
