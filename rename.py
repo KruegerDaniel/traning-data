@@ -2,14 +2,14 @@ import os
 import shutil
 import re
 
-# Directories
-base_dir = './media/videos'
-rendered_dir = './rendered'
-os.makedirs(rendered_dir, exist_ok=True)
 
-example_pattern = re.compile(r'^example_(\d+)$')
+def rename_manim_files(library_type='manim'):
+    # Directories
+    base_dir = './media/videos'
+    rendered_dir = f'./rendered/{library_type}'
+    os.makedirs(rendered_dir, exist_ok=True)
 
-def rename_manim_files():
+    example_pattern = re.compile(r'^example_(\d+)$')
     for entry in os.listdir(base_dir):
         match = example_pattern.match(entry)
         if not match:
