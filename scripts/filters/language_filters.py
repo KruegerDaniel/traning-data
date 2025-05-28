@@ -3,7 +3,8 @@ from collections import Counter
 
 from fast_langdetect import detect_language
 
-from config import ACCEPTED_LANGUAGES
+from scripts.config import ACCEPTED_LANGUAGES
+
 
 def extract_comments_and_strings(code: str) -> list[str]:
     pattern = r"(#.*?$|\"\"\".*?\"\"\"|'''.*?'''|\".*?\"|'.*?')"

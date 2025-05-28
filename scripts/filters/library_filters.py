@@ -1,7 +1,7 @@
 # ========= Logic Filters =========
 import re
 
-from config import PY_KEYWORDS
+from scripts.config import PY_KEYWORDS
 from scripts.filters.language_filters import is_accepted_language
 
 
