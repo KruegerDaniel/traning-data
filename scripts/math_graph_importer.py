@@ -14,7 +14,7 @@ if not library_type or library_type not in PY_KEYWORDS.keys():
 
 MAX_RESULTS = int(sys.argv[2]) if len(sys.argv) > 2 else math.inf
 
-language_type = "python" if library_type in ["manim", "matplotlib"] else "tex"
+language_type = "tex" if library_type in ["tikz"] else "python"
 dataset = load_dataset("bigcode/the-stack-dedup", data_dir=f"data/{language_type}", split="train", streaming=True)
 
 def save_example(code: str, index: int, label: str) -> None:

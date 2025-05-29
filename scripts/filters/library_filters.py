@@ -42,26 +42,31 @@ def manim_filter(code: str) -> bool:
 
 
 def matplotlib_filter(code: str) -> bool:
-    # Detect animation import or animation object creation
     animation_import = re.search(r"from\s+matplotlib\.animation\s+import|import\s+matplotlib\.animation", code)
     animation_call = re.search(r"(FuncAnimation|ArtistAnimation)\s*\(", code)
 
     # Detect showing or exporting
     has_show = "plt.show()" in code or "show(" in code
 
-    # Accept various forms of saving an animation (ani.save, animation.save, etc.)
-    # Common patterns: .save("), .save('), .save(
     has_save = re.search(r"\.\s*save\s*\(", code) is not None
 
-    # Only accept scripts with animation and (show or save)
     return (animation_import or animation_call) and (has_show or has_save)
 
+
 def tikz_animation_filter(code: str) -> bool:
-    has_tikz = r"\usepackage{tikz}" in code
-    has_animate = r"\usepackage{animate}" in code
-    has_animateinline = r"\begin{animateinline}" in code or r"\begin{animateinline" in code
-    has_tikzpicture = r"\begin{tikzpicture}" in code
-    return has_tikz and has_animate and has_animateinline and has_tikzpicture
+    has_tikzpicture = r"\begin{tikzpicture}" in code or r"\end{tikzpicture}" in code
+
+    animation_patterns = [
+        r"\\begin\{animateinline(?:\[.*?\])?\}",
+        r"\\animategraphics",
+        r"\\multiframe",
+        r"\\usepackage\{animate\}",
+    ]
+
+    has_animation = any(re.search(pattern, code) for pattern in animation_patterns)
+
+    return has_tikzpicture and has_animation
+
 
 def vpython_filter(code: str) -> bool:
     if not any(imp in code for imp in [

@@ -1,4 +1,3 @@
-
 ACCEPTED_LANGUAGES = ["EN", "JA"]
 
 # filter keywords
@@ -13,19 +12,12 @@ PY_KEYWORDS = {
         "import matplotlib.animation",
         "from matplotlib.animation"
     ],
-
     "vpython": [
         "import vpython",
         "from vpython import",
         "from visual import",  # older VPython
         "import visual",
         "from vpython.no_notebook import",  # sometimes used in scripts
-    ]
+    ],
+    "tikz": [""],
 }
-#
-# "tikz": [
-#         r"\usepackage{tikz}",
-#         r"\usepackage{animate}",
-#         r"\begin{animateinline}",
-#         r"\begin{tikzpicture}"
-#     ],
