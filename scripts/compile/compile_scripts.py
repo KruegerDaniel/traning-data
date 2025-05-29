@@ -4,7 +4,11 @@ import sys
 import time
 from pathlib import Path
 
-from scripts.compile.compille_matplotlib import run_matplot_script, patch_script_for_mp4
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.compile.compile_matplotlib import run_matplot_script, patch_script_for_mp4
 from scripts.compile.compile_manim import run_manim_script
 from scripts.config import PY_KEYWORDS
 
