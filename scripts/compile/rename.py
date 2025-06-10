@@ -3,21 +3,19 @@ import shutil
 import re
 
 
-def rename_manim_files(library_type='manim'):
+def rename_manim_files(input_dir='./media/videos', output_dir ='./rendered'):
     # Directories
-    base_dir = './media/videos'
-    rendered_dir = f'./rendered/{library_type}'
-    os.makedirs(rendered_dir, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
-    example_pattern = re.compile(r'^example_(\d+)$')
-    for entry in os.listdir(base_dir):
+    example_pattern = re.compile(r'^example_(\d+)_.*$')
+    for entry in os.listdir(input_dir):
         match = example_pattern.match(entry)
         if not match:
             continue
 
         example_name = entry
         example_index = match.group(1)
-        source_dir = os.path.join(base_dir, example_name, '480p15')
+        source_dir = os.path.join(input_dir, example_name, '480p15')
 
         if not os.path.exists(source_dir):
             print(f"Skipping missing directory: {source_dir}")
@@ -27,7 +25,7 @@ def rename_manim_files(library_type='manim'):
 
         for j, filename in enumerate(mp4_files):
             old_path = os.path.join(source_dir, filename)
-            new_filename = f'example_{example_index}_{j}.mp4'
+            new_filename = f'example_{example_index}_{filename}'
             new_path = os.path.join(source_dir, new_filename)
 
             # Rename
@@ -35,6 +33,6 @@ def rename_manim_files(library_type='manim'):
             print(f"Renamed: {old_path} -> {new_path}")
 
             # Move
-            final_path = os.path.join(rendered_dir, new_filename)
+            final_path = os.path.join(output_dir, new_filename)
             shutil.move(new_path, final_path)
             print(f"Moved: {new_path} -> {final_path}")

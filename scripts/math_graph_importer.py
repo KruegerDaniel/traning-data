@@ -7,18 +7,19 @@ from datasets import load_dataset
 
 from config import PY_KEYWORDS
 from filters.library_filters import filter_example
+from scripts.config import EXTENSIONS
 
 library_type = sys.argv[1] if len(sys.argv) > 1 else None
 if not library_type or library_type not in PY_KEYWORDS.keys():
-    raise ValueError("Invalid datatype. Choose from 'tex', 'md', or 'js'.")
+    raise ValueError(f"Invalid datatype. Choose from {PY_KEYWORDS.keys()}.")
 
 MAX_RESULTS = int(sys.argv[2]) if len(sys.argv) > 2 else math.inf
 
-language_type = "tex" if library_type in ["tikz"] else "python"
+language_type = "tex" if library_type == "tikz" else "svg" if library_type == "svg" else "python"
 dataset = load_dataset("bigcode/the-stack-dedup", data_dir=f"data/{language_type}", split="train", streaming=True)
 
 def save_example(code: str, index: int, label: str) -> None:
-    ext = "py" if label in PY_KEYWORDS.keys() else "tex"
+    ext = EXTENSIONS.get(label, [".py"])[0]
     filename = f"../sampled/{label}/example_{index}.{ext}"
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w", encoding='utf-8') as f:
@@ -30,6 +31,7 @@ saved_count = 0
 label_indices = {}
 
 start_time = time.time()
+print(f"Starting to save examples for {library_type}...")
 for i, example in enumerate(dataset):
     result = filter_example(example)
     if result:

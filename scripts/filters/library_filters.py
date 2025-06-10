@@ -100,8 +100,8 @@ def filter_example(example: dict):
                 return None
             elif library == "vpython" and not vpython_filter(code):
                 return None
-            elif library == "tikz" and not tikz_animation_filter(code):
-                return None
+            # elif library == "tikz" and not tikz_animation_filter(code):
+            #     return None
 
             print(f"Detected {library} code.")
             if is_accepted_language(code):

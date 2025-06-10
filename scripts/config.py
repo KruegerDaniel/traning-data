@@ -1,3 +1,10 @@
+import os
+
+from dotenv import load_dotenv
+from setuptools.package_index import EXTENSIONS
+
+load_dotenv()
+
 ACCEPTED_LANGUAGES = ["EN", "JA"]
 
 # filter keywords
@@ -19,5 +26,16 @@ PY_KEYWORDS = {
         "import visual",
         "from vpython.no_notebook import",  # sometimes used in scripts
     ],
-    "tikz": [""],
+    "tikz": ["usetikzlibrary{animations}"],
+    "svg": ["<animate>", "<animateTransform>", "<animateMotion>"],
 }
+
+EXTENSIONS = {
+    "manim": ["py"],
+    "matplotlib": ["py"],
+    "vpython": ["py"],
+    "tikz": ["tex"],
+    "svg": ["svg"]
+}
+
+OPEN_AI_API_KEY = os.getenv("OPEN_AI_API_KEY")

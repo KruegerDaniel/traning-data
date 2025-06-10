@@ -26,14 +26,13 @@ except Exception as e:
     temp_path.write_text(code, encoding="utf-8")
 
 
-def run_matplot_script(py_path, temp_path, timeout=120):
+def run_matplot_script(py_path, timeout=120):
     try:
-        print(f"▶️ Running: {temp_path.name}")
 
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
         result = subprocess.run(
-            [sys.executable, str(temp_path)],
+            [sys.executable, str(py_path)],
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -46,6 +45,6 @@ def run_matplot_script(py_path, temp_path, timeout=120):
         print("⚠️ STDERR:")
         print(result.stderr)
     except subprocess.TimeoutExpired:
-        print(f"⏱ Timeout: {temp_path} took too long.")
+        print(f"⏱ Timeout: {py_path} took too long.")
     except Exception as e:
-        print(f"❌ Error running {temp_path}: {e}")
+        print(f"❌ Error running {py_path}: {e}")
