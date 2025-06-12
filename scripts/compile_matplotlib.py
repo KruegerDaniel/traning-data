@@ -18,6 +18,7 @@ import pathlib
 import re
 import subprocess
 import sys
+from subprocess import TimeoutExpired
 
 # ---------- helpers ----------------------------------------------------------
 STD_LIB_ROOTS = {
@@ -95,6 +96,10 @@ def main(folder: pathlib.Path) -> None:
             with open('error.log', 'a') as log_file:
                 log_file.write(f"Error running {script.name}: {exc}\n")
             print(f"❌ {script.name} exited with status {exc.returncode}\n")
+        except TimeoutExpired as exc:
+            with open('error.log', 'a') as log_file:
+                log_file.write(f"Timeout expired for {script.name}: {exc.timeout}\n")
+            print(f"⏰ {script.name} timed out after 300 seconds\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Batch-run matplotlib animations")
